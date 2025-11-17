@@ -139,3 +139,20 @@ st.markdown(
     "</p>",
     unsafe_allow_html=True
 )
+# Creamos una serie temporal mock tomando el último año
+months = pd.date_range(end=selected_date, periods=12, freq="M")
+
+# --- FIX: garantizar que paro SIEMPRE tenga 12 valores ---
+if unemp["series"] and len(unemp["series"]) >= 12:
+    paro = np.array(unemp["series"][-12:])
+else:
+    paro = np.linspace(3800, 3300, 12) + np.random.normal(0, 40, 12)
+
+# --- FIX: garantizar que traffic_incidents SIEMPRE tenga 12 valores ---
+traffic_incidents = np.linspace(40, 55, 12) + np.random.normal(0, 4, 12)
+
+df_corr = pd.DataFrame({
+    "Mes": months,
+    "Paro": paro,
+    "Incidencias de tráfico": traffic_incidents
+}).set_index("Mes")
